@@ -1,5 +1,5 @@
 import { InputPosRange, InputSlice } from "#input/input.js";
-import { OpenParen, CloseParen, Num, Oper, TokenVal } from "#scan/token.js";
+import { Whitespace, OpenParen, CloseParen, Num, Oper, UnrecognizedChar, TokenVal } from "#scan/token.js";
 import { Err } from "#error/err.js";
 
 export const maxScanStrLen = 4;
@@ -9,6 +9,17 @@ export interface Scan {
     scan(input: InputSlice): TokenVal;
 }
 
+export class WhiteSpaceScan implements Scan {
+    skipHandled(input: InputSlice): void {
+        while (input.at(0) == " ") {
+            input.next();
+        }
+    }
+    scan(input: InputSlice): TokenVal {
+        this.skipHandled(input);
+        return new TokenVal(new Whitespace(), null);
+    }
+}
 export class OpenParenScan implements Scan {
     skipHandled(input: InputSlice): void {
         if (input.at(0) === "(") {

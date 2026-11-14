@@ -1,7 +1,7 @@
 import type { Err } from "#error/err.js";
 import type { InputPosRange } from "#input/input.js";
 
-export class UnrecognizedChar {}
+export class Whitespace {}
 export class OpenParen {}
 export class CloseParen {}
 export class Num {
@@ -26,6 +26,7 @@ export class Oper {
         this.#str = str;
     }
 }
+export class UnrecognizedChar {}
 
 export class TokenVal {
     #val: Num | Oper | OpenParen | CloseParen | UnrecognizedChar;
