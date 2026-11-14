@@ -111,6 +111,11 @@ export class OperScan implements Scan {
     #maxOperLen: number = 0;
     #opers: Map<string, Oper>;
 
+    constructor(opers: Array<Oper>) {
+        this.#maxOperLen = Math.max(...opers.map((oper) => oper.str.length));
+        this.#opers = new Map(opers.map((oper) => [oper.str, oper]));
+    }
+
     #scanStr(input: InputSlice): string {
         let curStr: string = "";
         let longestStr: string = "";
@@ -131,10 +136,5 @@ export class OperScan implements Scan {
         input.next(scanStr.length);
         const res = this.#opers.get(scanStr);
         return new TokenVal(res as Oper, null);
-    }
-
-    constructor(opers: Array<Oper>) {
-        this.#maxOperLen = Math.max(...opers.map((oper) => oper.str.length));
-        this.#opers = new Map(opers.map((oper) => [oper.str, oper]));
     }
 }
