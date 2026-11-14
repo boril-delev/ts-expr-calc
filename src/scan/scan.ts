@@ -1,5 +1,13 @@
 import { InputPosRange, InputSlice } from "#input/input.js";
-import { Whitespace, OpenParen, CloseParen, Num, Oper, UnrecognizedChar, TokenVal } from "#scan/token.js";
+import {
+    Whitespace,
+    OpenParen,
+    CloseParen,
+    Num,
+    Oper,
+    UnrecognizedChar,
+    TokenVal,
+} from "#scan/token.js";
 import { Err } from "#error/err.js";
 
 export const maxScanStrLen = 4;
@@ -9,7 +17,7 @@ export interface Scan {
     scan(input: InputSlice): TokenVal;
 }
 
-export class WhiteSpaceScan implements Scan {
+export class WhitespaceScan implements Scan {
     skipHandled(input: InputSlice): void {
         while (input.at(0) == " ") {
             input.next();
@@ -155,7 +163,10 @@ export class UnrecognizedCharScan implements Scan {
         input.next();
     }
     scan(input: InputSlice): TokenVal {
-        const res = new TokenVal(new UnrecognizedCharScan(), new Err("Unrecognized character.", new InputPosRange(input.pos, input.pos + 1)));
+        const res = new TokenVal(
+            new UnrecognizedCharScan(),
+            new Err("Unrecognized character.", new InputPosRange(input.pos, input.pos + 1)),
+        );
         input.next();
         return res;
     }
