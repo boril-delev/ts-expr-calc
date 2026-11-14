@@ -1,21 +1,18 @@
+import type { InputPosRange } from "#input/input.js";
+
 export class Err {
     #msg: string;
-    #begPos: number;
-    #endPos: number;
+    #range: InputPosRange;
 
     get msg() {
         return this.#msg;
     }
-    get begPos() {
-        return this.#begPos;
-    }
-    get endPos() {
-        return this.#endPos;
+    get range() {
+        return this.#range;
     }
 
-    constructor(msg: string, begPos: number, endPos: number) {
+    constructor(msg: string, range: InputPosRange) {
         this.#msg = msg;
-        this.#begPos = begPos;
-        this.#endPos = endPos;
+        this.#range = range;
     }
 }
