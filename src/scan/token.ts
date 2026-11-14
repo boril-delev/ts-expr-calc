@@ -1,6 +1,7 @@
 import type { Err } from "#error/err.js";
 import type { InputPosRange } from "#input/input.js";
 
+export class UnrecognizedChar {}
 export class OpenParen {}
 export class CloseParen {}
 export class Num {
@@ -27,7 +28,7 @@ export class Oper {
 }
 
 export class TokenVal {
-    #val: Num | Oper | OpenParen | CloseParen;
+    #val: Num | Oper | OpenParen | CloseParen | UnrecognizedChar;
     #err: Err | null;
 
     get val() {
@@ -37,7 +38,7 @@ export class TokenVal {
         return this.#err;
     }
 
-    constructor(val: Num | Oper | OpenParen | CloseParen, err: Err | null) {
+    constructor(val: Num | Oper | OpenParen | CloseParen | UnrecognizedChar, err: Err | null) {
         this.#val = val;
         this.#err = err;
     }

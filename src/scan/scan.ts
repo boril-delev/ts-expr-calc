@@ -138,3 +138,14 @@ export class OperScan implements Scan {
         return new TokenVal(res as Oper, null);
     }
 }
+
+export class UnrecognizedCharScan implements Scan {
+    skipHandled(input: InputSlice): void {
+        input.next();
+    }
+    scan(input: InputSlice): TokenVal {
+        const res = new TokenVal(new UnrecognizedCharScan(), new Err("Unrecognized character.", new InputPosRange(input.pos, input.pos + 1)));
+        input.next();
+        return res;
+    }
+}
