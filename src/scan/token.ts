@@ -13,28 +13,13 @@ export class Num {
 }
 export class Oper {
     #str: string;
-    #precedence: number;
-    #leftAssoc: boolean;
-    #rightAssoc: boolean;
 
     get str() {
         return this.#str;
     }
-    get precedence() {
-        return this.#precedence;
-    }
-    get leftAssoc() {
-        return this.#leftAssoc;
-    }
-    get rightAssoc() {
-        return this.#rightAssoc;
-    }
 
-    constructor(str: string, precedence: number, leftAssoc: boolean, rightAssoc: boolean) {
+    constructor(str: string) {
         this.#str = str;
-        this.#precedence = precedence;
-        this.#leftAssoc = leftAssoc;
-        this.#rightAssoc = rightAssoc;
     }
 }
 
