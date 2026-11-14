@@ -1,13 +1,12 @@
 import { InputPosRange, InputSlice } from "#input/input.js";
-import { OpenParen, CloseParen, Num, Oper } from "#scan/token.js";
-import type { TokenVal } from "#scan/token.js";
+import { OpenParen, CloseParen, Num, Oper, TokenVal } from "#scan/token.js";
 import { Err } from "#error/err.js";
 
 export const maxScanStrLen = 4;
 
 export interface Scan {
     skipHandled(input: InputSlice): void;
-    scan(input: InputSlice): TokenVal | Err;
+    scan(input: InputSlice): TokenVal;
 }
 
 export class OpenParenScan implements Scan {
@@ -16,9 +15,9 @@ export class OpenParenScan implements Scan {
             input.next();
         }
     }
-    scan(input: InputSlice): TokenVal | Err {
+    scan(input: InputSlice): TokenVal {
         input.next();
-        return new OpenParen();
+        return new TokenVal(new OpenParen(), null);
     }
 }
 export class CloseParenScan implements Scan {
@@ -27,9 +26,9 @@ export class CloseParenScan implements Scan {
             input.next();
         }
     }
-    scan(input: InputSlice): TokenVal | Err {
+    scan(input: InputSlice): TokenVal {
         input.next();
-        return new CloseParen();
+        return new TokenVal(new CloseParen(), null);
     }
 }
 export class NumScan implements Scan {
@@ -83,10 +82,10 @@ export class NumScan implements Scan {
             this.#skipTrail(input);
         }
     }
-    scan(input: InputSlice): TokenVal | Err {
+    scan(input: InputSlice): TokenVal {
         const whole = this.#scanWhole(input);
         if (whole instanceof Err) {
-            return whole;
+            return new TokenVal(new Num(0), whole);
         }
         const fract =
             input.at(0) != "."
@@ -96,13 +95,16 @@ export class NumScan implements Scan {
                       return this.#scanFract(input);
                   })();
         if (fract instanceof Err) {
-            return fract;
+            return new TokenVal(new Num(0), fract);
         }
         const trailRange = this.#skipTrail(input);
         if (trailRange.len != 0) {
-            return new Err("Unexpected trailing characters after number.", trailRange);
+            return new TokenVal(
+                new Num(0),
+                new Err("Unexpected trailing characters after number.", trailRange),
+            );
         }
-        return new Num(whole + fract);
+        return new TokenVal(new Num(whole + fract), null);
     }
 }
 export class OperScan implements Scan {
@@ -124,11 +126,11 @@ export class OperScan implements Scan {
     skipHandled(input: InputSlice): void {
         input.next(this.#scanStr(input).length);
     }
-    scan(input: InputSlice): Oper | Err {
+    scan(input: InputSlice): TokenVal {
         const scanStr = this.#scanStr(input);
         input.next(scanStr.length);
         const res = this.#opers.get(scanStr);
-        return res as Oper;
+        return new TokenVal(res as Oper, null);
     }
 
     constructor(opers: Array<Oper>) {
