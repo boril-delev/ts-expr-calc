@@ -9,7 +9,7 @@ async function main() {
     console.log('Enter an expression or "quit" to quit.');
     while (true) {
         const expr = await rl.question("> ");
-        if (expr == "quit") {
+        if (expr === "quit") {
             break;
         }
         let arr = Array.from(expr);

@@ -12,7 +12,7 @@ export interface Scan {
 
 export class OpenParenScan implements Scan {
     skipHandled(input: InputSlice): void {
-        if (input.at(0) == "(") {
+        if (input.at(0) === "(") {
             input.next();
         }
     }
@@ -23,7 +23,7 @@ export class OpenParenScan implements Scan {
 }
 export class CloseParenScan implements Scan {
     skipHandled(input: InputSlice): void {
-        if (input.at(0) == ")") {
+        if (input.at(0) === ")") {
             input.next();
         }
     }
