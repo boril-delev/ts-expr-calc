@@ -1,3 +1,5 @@
+import type { InputPosRange } from "#input/input.js";
+
 export class OpenParen {}
 export class CloseParen {}
 export class Num {
@@ -26,22 +28,17 @@ export class Oper {
 export type TokenVal = Num | Oper | OpenParen | CloseParen;
 export class Token {
     #val: TokenVal;
-    #begIdx: number;
-    #endIdx: number;
+    #posRange: InputPosRange;
 
     get val() {
         return this.#val;
     }
-    get begIdx() {
-        return this.#begIdx;
-    }
-    get endIdx() {
-        return this.#endIdx;
+    get posRange() {
+        return this.#posRange;
     }
 
-    constructor(val: TokenVal, begIdx: number, endIdx: number) {
+    constructor(val: TokenVal, posRange: InputPosRange) {
         this.#val = val;
-        this.#begIdx = begIdx;
-        this.#endIdx = endIdx;
+        this.#posRange = posRange;
     }
 }
