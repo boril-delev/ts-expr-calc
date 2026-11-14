@@ -1,6 +1,5 @@
-
-export class OpenParen { }
-export class CloseParen { }
+export class OpenParen {}
+export class CloseParen {}
 export class Num {
     #num: number;
 
@@ -11,7 +10,7 @@ export class Num {
     constructor(num: number) {
         this.#num = num;
     }
-};
+}
 export class Oper {
     #str: string;
     #precedence: number;
