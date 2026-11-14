@@ -99,7 +99,7 @@ export class NumScan implements Scan {
             return fract;
         }
         const trailRange = this.#skipTrail(input);
-        if (trailRange.len() != 0) {
+        if (trailRange.len != 0) {
             return new Err("Unexpected trailing characters after number.", trailRange);
         }
         return new Num(whole + fract);
