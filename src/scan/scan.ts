@@ -164,7 +164,7 @@ export class UnrecognizedCharScan implements Scan {
     }
     scan(input: InputSlice): TokenVal {
         const res = new TokenVal(
-            new UnrecognizedCharScan(),
+            new UnrecognizedChar(),
             new Err("Unrecognized character.", new InputPosRange(input.pos, input.pos + 1)),
         );
         input.next();
