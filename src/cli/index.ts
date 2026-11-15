@@ -62,7 +62,7 @@ async function main() {
         if (expr === "quit") {
             break;
         }
-        let tokenIter = new TokenIter(new Input(expr));
+        const tokenIter = new TokenIter(new Input(expr));
         while (!tokenIter.isEof) {
             console.log(
                 util.inspect(debug(tokenIter.cur), { depth: null, colors: true, compact: false }),

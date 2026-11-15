@@ -45,8 +45,8 @@ export class TokenIter {
     #pickScan(): Scan {
         let maxSkipped = 0;
         let maxSkippedScan = this.#unrecognizedCharScan;
-        for (let scan of this.#scans) {
-            let inputSlice = new InputSlice(
+        for (const scan of this.#scans) {
+            const inputSlice = new InputSlice(
                 this.#input.input,
                 this.#input.pos,
                 new InputPosRange(this.#input.pos, this.#input.pos + maxScanStrLen),
@@ -63,7 +63,7 @@ export class TokenIter {
     }
 
     #rawNext(): void {
-        let scan = this.#pickScan();
+        const scan = this.#pickScan();
         const begPos = this.#input.pos;
         const tokenVal = scan.scan(this.#input);
         const endPos = this.#input.pos;
