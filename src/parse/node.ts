@@ -1,42 +1,83 @@
-export type OperAssoc = "left" | "right" | "none";
-export type OperType = "prefUnary" | "postUnary" | "binary";
-export class Oper {
-    #str: string;
+import * as scan from "#scan/token.js"
 
-    get str() {
-        return this.#str;
-    }
-
-    constructor(str: string) {
-        this.#str = str;
-    }
+export interface NodeVal {
+    eval(): number;
 }
-export class OperPriorityLayer {
-    #type: OperType;
-    #assoc: OperAssoc;
-    #opers: Array<Oper>;
 
-    get type() {
-        return this.#type;
-    }
-    get assoc() {
-        return this.#assoc;
-    }
-    get opers() {
-        return this.#opers;
+export class Num implements NodeVal {
+    #val: number;
+
+    get val() {
+        return this.#val;
     }
 
-    constructor(type: OperType, assoc: OperAssoc, opers: Array<Oper>) {
-        this.#type = type;
-        this.#assoc = assoc;
-        this.#opers = opers;
+    constructor(val: number) {
+        this.#val = val;
+    }
+
+    eval(): number {
+        return this.#val;
     }
 }
 
-// in order of priority (first = lowest priority)
-export const operLayers = [
-    new OperPriorityLayer("binary", "left", [new Oper("+"), new Oper("-")]),
-    new OperPriorityLayer("binary", "left", [new Oper("*"), new Oper("/")]),
-    new OperPriorityLayer("prefUnary", "right", [new Oper("+"), new Oper("-")]),
-    new OperPriorityLayer("postUnary", "left", []),
-];
+export class UnaryOper implements NodeVal {
+    #func: (l: number) => number;
+    #lhs: Node;
+
+    get func() {
+        return this.#func;
+    }
+    get lhs() {
+        return this.#lhs;
+    }
+
+    constructor(func: (l: number) => number, lhs: Node) {
+        this.#func = func;
+        this.#lhs = lhs;
+    }
+
+    eval(): number {
+        return this.#func(this.#lhs.eval());
+    }
+}
+export class BinaryOper implements NodeVal {
+    #func: (l: number, r: number) => number;
+    #lhs: Node;
+    #rhs: Node;
+
+    get func() {
+        return this.#func;
+    }
+    get lhs() {
+        return this.#lhs;
+    }
+    get rhs() {
+        return this.#rhs;
+    }
+
+    constructor(func: (l: number, r: number) => number, lhs: Node, rhs: Node) {
+        this.#func = func;
+        this.#lhs = lhs;
+        this.#rhs = rhs;
+    }
+
+    eval(): number {
+        return this.#func(this.#lhs.eval(), this.#rhs.eval());
+    }
+}
+
+export class Node {
+    #val: NodeVal;
+
+    get val() {
+        return this.#val;
+    }
+
+    constructor(val: NodeVal) {
+        this.#val = val;
+    }
+
+    eval(): number {
+        return this.#val.eval();
+    }
+}
