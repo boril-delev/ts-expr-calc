@@ -9,6 +9,7 @@ import {
     UnrecognizedCharScan,
     WhitespaceScan,
 } from "#scan/scan.js";
+import * as constants from "#constants.js";
 import type { Scan } from "#scan/scan.js";
 
 export class TokenIter {
@@ -17,13 +18,11 @@ export class TokenIter {
         new OpenParenScan(),
         new CloseParenScan(),
         new NumScan(),
-        new OperScan([
-            // TODO use the hardcoded ones in `parse/node.ts`
-            new Oper("+"),
-            new Oper("-"),
-            new Oper("*"),
-            new Oper("/"),
-        ]),
+        new OperScan(
+            constants.operLayers
+                .map((layer) => layer.opers.map((oper) => new Oper(oper.str)))
+                .flat(),
+        ),
     ];
     #unrecognizedCharScan: UnrecognizedCharScan = new UnrecognizedCharScan();
     #input: InputSlice;
