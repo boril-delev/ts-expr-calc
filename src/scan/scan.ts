@@ -19,7 +19,7 @@ export interface Scan {
 
 export class WhitespaceScan implements Scan {
     skipHandled(input: InputSlice): void {
-        while (input.at(0) == " ") {
+        while (input.at(0) === " ") {
             input.next();
         }
     }
@@ -55,7 +55,7 @@ export class NumScan implements Scan {
         return "0" <= x && x <= "9";
     }
     #isLetter(x: string): boolean {
-        return ("a" <= x && x <= "z") || ("A" <= x && x <= "Z") || x == "_";
+        return ("a" <= x && x <= "z") || ("A" <= x && x <= "Z") || x === "_";
     }
     #isHandled(x: string): boolean {
         return this.#isDigit(x) || this.#isLetter(x);
