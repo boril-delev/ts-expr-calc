@@ -1,4 +1,4 @@
-import * as scan from "#scan/token.js"
+import * as scan from "#scan/token.js";
 
 export interface NodeVal {
     eval(): number;
