@@ -1,5 +1,3 @@
-import * as scan from "#scan/token.js";
-
 export interface NodeVal {
     eval(): number;
 }
