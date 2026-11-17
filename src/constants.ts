@@ -21,18 +21,13 @@ export class BinaryOper {
     }
 }
 export class Oper<SpecificOper> {
-    #str: string;
     #oper: SpecificOper;
 
-    get str() {
-        return this.#str;
-    }
     get oper() {
         return this.#oper;
     }
 
-    constructor(str: string, oper: SpecificOper) {
-        this.#str = str;
+    constructor(oper: SpecificOper) {
         this.#oper = oper;
     }
 }
@@ -41,7 +36,7 @@ export type UnaryOperKind = "pref" | "post";
 export type OperAssoc = "left" | "right";
 export class UnaryOperLayer {
     #kind: UnaryOperKind;
-    #opers: Array<Oper<UnaryOper>>;
+    #opers: Map<string, Oper<UnaryOper>>;
 
     get kind() {
         return this.#kind;
@@ -50,14 +45,14 @@ export class UnaryOperLayer {
         return this.#opers;
     }
 
-    constructor(kind: UnaryOperKind, opers: Array<Oper<UnaryOper>>) {
+    constructor(kind: UnaryOperKind, opers: Map<string, Oper<UnaryOper>>) {
         this.#kind = kind;
         this.#opers = opers;
     }
 }
 export class BinaryOperLayer {
     #assoc: OperAssoc;
-    #opers: Array<Oper<BinaryOper>>;
+    #opers: Map<string, Oper<BinaryOper>>;
 
     get assoc() {
         return this.#assoc;
@@ -66,7 +61,7 @@ export class BinaryOperLayer {
         return this.#opers;
     }
 
-    constructor(assoc: OperAssoc, opers: Array<Oper<BinaryOper>>) {
+    constructor(assoc: OperAssoc, opers: Map<string, Oper<BinaryOper>>) {
         this.#assoc = assoc;
         this.#opers = opers;
     }
@@ -74,16 +69,16 @@ export class BinaryOperLayer {
 
 // in order of priority (first = lowest priority)
 export const operLayers: Array<UnaryOperLayer | BinaryOperLayer> = [
-    new BinaryOperLayer("left", [
-        new Oper("+", new BinaryOper((l, r) => l + r)),
-        new Oper("-", new BinaryOper((l, r) => l - r)),
-    ]),
-    new BinaryOperLayer("left", [
-        new Oper("*", new BinaryOper((l, r) => l * r)),
-        new Oper("/", new BinaryOper((l, r) => l / r)),
-    ]),
-    new UnaryOperLayer("pref", [
-        new Oper("+", new UnaryOper((l) => +l)),
-        new Oper("-", new UnaryOper((l) => -l)),
-    ]),
+    new BinaryOperLayer("left", new Map([
+        ["+", new Oper(new BinaryOper((l, r) => l + r))],
+        ["-", new Oper(new BinaryOper((l, r) => l - r))],
+    ])),
+    new BinaryOperLayer("left", new Map([
+        ["*", new Oper(new BinaryOper((l, r) => l * r))],
+        ["/", new Oper(new BinaryOper((l, r) => l / r))],
+    ])),
+    new UnaryOperLayer("pref", new Map([
+        ["+", new Oper(new UnaryOper((l) => +l))],
+        ["-", new Oper(new UnaryOper((l) => -l))],
+    ])),
 ];
